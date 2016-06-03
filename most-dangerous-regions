@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python most_dangerous_regions.py "$@"
