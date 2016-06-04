@@ -17,12 +17,15 @@ class EarthquakeAnalyzer(object):
     days = None
     region_type = None
     num_regions = None
+    seen_ids = []
+    earthquake_history = []
     VIABLE_REGION_GROUPINGS = ("tz", "net", "place",)
 
     def __init__(self):
-        self.parse_arguments()
+        self._parse_arguments()
+        self._load_earthquakes_from_db()
 
-    def parse_arguments(self):
+    def _parse_arguments(self):
         parser = argparse.ArgumentParser(description="Prints the most dangerous regions as measured"
                                          " by total measured earthquake energy in descending "
                                          "order.")
@@ -44,10 +47,12 @@ class EarthquakeAnalyzer(object):
 
     def analyze_and_print(self):
         """
+        Fetches new earthquakes from the USGS API and saves them to the db.
         Prints a table of the regions with the most dangerous earthquakes.
         """
-        earthquakes = self._get_earthquakes()
-        earthquake_dict = self._group_earthquakes_by_region(earthquakes)
+        earthquakes = self._request_new_earthquakes()
+        self._update_earthquake_history(earthquakes)
+        earthquake_dict = self._group_earthquakes_by_region(self.earthquake_history)
         formatted_earthquake_list = self._sort_by_most_dangerous(
             earthquake_dict)[:self.num_regions]
 
@@ -57,36 +62,23 @@ class EarthquakeAnalyzer(object):
         for row in formatted_earthquake_list:
             print row_format.format(*row)
 
-    def _get_earthquakes(self):
+    def _load_earthquakes_from_db(self):
         """
-        Returns a JSON list of all earthquakes that occured with the past number of days (as 
-        specified by the `days` command line arg.)
-        """
-        seen_ids, earthquake_history = self._load_previously_seen_earthquakes_from_file()
-        earthquakes = self._request_new_earthquakes()
-        earthquake_history = self._update_earthquake_history(earthquakes, earthquake_history,
-                                                             seen_ids)
-        return earthquake_history
-
-    def _load_previously_seen_earthquakes_from_file(self):
-        """
+        Loads previously seen earthquakes into the class, within the limit of the `day` param.
         Because the USGS API only returns earthquakes from within the past 30 days, we look up
         older earthquakes from our very basic earthquake file database.  Earthquake unique ids 
         are in $PATH/earthquake_ids.txt and the full JSON info of these ids can be found in 
         $PATH/usgs_dump.json 
         """
-        seen_ids = []
-        earthquake_history = []
         try:
             with open('{}/usgs_dump.json'.format(PATH), 'r') as data_file:
                 data = json.load(data_file)
-                earthquake_history.extend(data)
+                self.earthquake_history.extend(data)
             with open('{}/earthquake_ids.txt'.format(PATH), 'r') as data_file:
-                seen_ids = data_file.read().splitlines()
+                self.seen_ids = data_file.read().splitlines()
         except IOError:
             # The data file does not exist yet.
             pass
-        return seen_ids, earthquake_history
 
     def _request_new_earthquakes(self):
         """
@@ -100,23 +92,22 @@ class EarthquakeAnalyzer(object):
                 "Error getting earthquake data from: {}".format(EARTHQUAKE_JSON_URL))
         return earthquakes
 
-    def _update_earthquake_history(self, new_earthquakes, earthquake_history, seen_ids):
+    def _update_earthquake_history(self, new_earthquakes):
         """
         Updates our very basic earthquake file database with earthquakes that have not previously 
         been seen before.
         """
         data_changed = False
         for quake in new_earthquakes:
-            if quake["id"] not in seen_ids:
-                earthquake_history.append(quake)
-                seen_ids.append(quake["id"])
+            if quake["id"] not in self.seen_ids:
+                self.earthquake_history.append(quake)
+                self.seen_ids.append(quake["id"])
                 data_changed = True
         if data_changed:
             with open('{}/usgs_dump.json'.format(PATH), 'w') as data_file:
-                json.dump(earthquake_history, data_file)
+                json.dump(self.earthquake_history, data_file)
             with open('{}/earthquake_ids.txt'.format(PATH), 'w') as data_file:
-                data_file.write("\n".join(seen_ids))
-        return earthquake_history
+                data_file.write("\n".join(self.seen_ids))
 
     def _group_earthquakes_by_region(self, earthquake_json):
         """
