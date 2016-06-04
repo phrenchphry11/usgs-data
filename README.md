@@ -1,4 +1,4 @@
-# backend-coding-challenge
+# Most Dangerous Earthquake Regions
 
 This tool is a commandline program that returns a table of the regions on earth most prone to dangerous earthquakes, given data from the USGS [API](http://earthquake.usgs.gov/fdsnws/event/1/).
 
