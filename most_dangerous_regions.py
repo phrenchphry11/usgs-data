@@ -1,5 +1,6 @@
 from collections import defaultdict
 import argparse
+import datetime
 import json
 
 import requests
@@ -63,16 +64,22 @@ class EarthquakeAnalyzer(object):
         """
         Takes in an input of earthquakes in GeoJson format, as returned from the
         USGS API.
-        Returns a dictionary where keys are regions, and the values are lists of magnitudes.
+        Returns a dictionary where keys are regions, and the values are lists of magnitudes,
+        all within the date specified by the command line args.
         """
         if self.region_type not in self.VIABLE_REGION_GROUPINGS:
             raise Exception("Region `{}` not a valid region type.".format(self.region_type))
 
+        cutoff_date = datetime.datetime.now() - datetime.timedelta(days=self.days)
         earthquake_dict = defaultdict(list)
         for earthquake in earthquake_json:
             region = earthquake['properties'][self.region_type]
             magnitude = earthquake['properties']['mag']
-            earthquake_dict[region].append(magnitude)
+            epoch_time = earthquake["properties"]["updated"]
+            # divide by 1000 to convert from milliseconds to seconds
+            date = datetime.datetime.fromtimestamp(epoch_time / 1000)
+            if date > cutoff_date:
+                earthquake_dict[region].append(magnitude)
         return earthquake_dict
 
     def _sort_by_most_dangerous(self, earthquake_dict):
