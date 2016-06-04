@@ -44,6 +44,3 @@ def get_place(place_string):
         return m.group(2)
     else:
         return place_string
-
-
-    

@@ -51,14 +51,16 @@ class EarthquakeAnalyzer(object):
         formatted_earthquake_list = self._sort_by_most_dangerous(
             earthquake_dict)[:self.num_regions]
 
-        print "REGION\t\tEARTHQUAKE COUNT\tTOTAL MAGNITUDE"
-        for region, count, magnitude in formatted_earthquake_list:
-            print "{}\t\t{}\t\t\t{}".format(region, count, magnitude)
+        header_list = ["REGION", "EARTHQUAKE COUNT", "TOTAL MAGNITUDE"]
+        row_format = "{:<30}" * (len(header_list))
+        print row_format.format(*header_list)
+        for row in formatted_earthquake_list:
+            print row_format.format(*row)
 
     def _get_earthquakes(self):
         """
         Returns a JSON list of all earthquakes that occured with the past number of days (as 
-            specified by the `days` command line arg.)
+        specified by the `days` command line arg.)
         """
         seen_ids, earthquake_history = self._load_previously_seen_earthquakes_from_file()
         earthquakes = self._request_new_earthquakes()
@@ -88,7 +90,7 @@ class EarthquakeAnalyzer(object):
 
     def _request_new_earthquakes(self):
         """
-        Returns a JSON list of earthquakes from the USGS API.
+        Returns a GeoJson list of earthquakes from the USGS API.
         """
         earthquake_response = requests.get(EARTHQUAKE_JSON_URL)
         if earthquake_response.status_code == 200:
@@ -134,7 +136,7 @@ class EarthquakeAnalyzer(object):
             if region is None:
                 continue
             magnitude = earthquake["properties"]["mag"]
-            epoch_time = earthquake["properties"]["updated"]
+            epoch_time = earthquake["properties"]["time"]
             # divide by 1000 to convert from milliseconds to seconds
             date = datetime.datetime.fromtimestamp(epoch_time / 1000)
             if date > cutoff_date:

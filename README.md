@@ -44,25 +44,31 @@ Regional groupings include timezone (tz), network (net), city (place):
 Sample output looks something like:
 
 ```
-$ ./most-dangerous-regions --region-type=net --num-regions=2
-REGION    EARTHQUAKE COUNT  TOTAL MAGNITUDE
-us    795     7.88891457232
-ak    2485      5.83884362451
+$ ./most-dangerous-regions --region-type=place --num-regions=3 --days=2
+REGION                        EARTHQUAKE COUNT              TOTAL MAGNITUDE               
+Nikol                         3                             5.37918124605                 
+South of Tasmania             1                             5.2                           
+South of the Fiji Islands     1                             5.1   
 ```
 
 and
 
 ```
-$ ./most-dangerous-regions --region-type=tz --num-regions=10
-REGION    EARTHQUAKE COUNT  TOTAL MAGNITUDE
--120    15      7.22449270832
--300    218     7.14706659389
--720    135     6.98733617984
-480   95      6.86882925426
-420   17      6.68377930931
-540   72      6.65808574549
--420    4362      6.53736881821
-600   67      6.5362137677
--240    493     6.28999100609
-720   36      6.28645960271
+$ ./most-dangerous-regions --region-type=net --num-regions=20
+REGION                        EARTHQUAKE COUNT              TOTAL MAGNITUDE               
+us                            801                           7.88966280209                 
+ak                            2520                          5.84026391942                 
+pr                            456                           5.41401148658                 
+nc                            1565                          4.95204671502                 
+nn                            1077                          4.75293920388                 
+ci                            1255                          4.71465238654                 
+at                            1                             4.6                           
+hv                            217                           4.4228641695                  
+uu                            164                           4.20861561329                 
+uw                            437                           4.04561485108                 
+mb                            154                           3.84026479175                 
+nm                            32                            3.61392945576                 
+se                            13                            3.23660841828                 
+ismpkansas                    8                             2.9600003324                  
+ld                            4                             1.85158129724
 ```
