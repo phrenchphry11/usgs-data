@@ -30,14 +30,14 @@ class EarthquakeAnalyzer(object):
                                          " by total measured earthquake energy in descending "
                                          "order.")
         parser.add_argument("--days", type=int, dest="days", default=30,
-                            help="Number of days back from the current time to consider. "
+                            help="Optional. Number of days back from the current time to consider. "
                             "Defaults to 30.")
-        parser.add_argument("--region-type", dest="region_type", default="tz",
+        parser.add_argument("--region-type", dest="region_type", default="place",
                             help="Optional. Group earthquakes by different region type. "
-                            "Defaults to tz. Accepts `tz` (timezone), `net` "
+                            "Defaults to place. Accepts `tz` (timezone), `net` "
                             "(reporting network) and `place` (City, Country).")
         parser.add_argument("--num-regions", type=int, dest="num_regions", default=10,
-                            help="Number of regions to display. "
+                            help="Optional. Number of regions to display. "
                             "Defaults to 10.")
 
         args = parser.parse_args()

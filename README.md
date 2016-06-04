@@ -2,7 +2,7 @@
 
 This tool is a commandline program that returns a table of the regions on earth most prone to dangerous earthquakes, given data from the USGS [API](http://earthquake.usgs.gov/fdsnws/event/1/).
 
-### Dependency installation.
+### Dependency installation
 
 You'll need Python 2.7, and other dependencies should be installed via Pip.  Pip is already installed if you are 
 running >= Python 2.7.9, but you can grab it [here](https://pip.pypa.io/en/stable/installing/).
@@ -12,7 +12,7 @@ Dependencies can be installed by running
 pip install -r requirements.txt
 ```
 
-### Running the program.
+### Running the program
 
 The program can be run through Python or just as a bash script:
 ```
@@ -40,6 +40,7 @@ Regional groupings include timezone (tz), network (net), city (place):
 
 2. Network is the ID of a data contributor. Identifies the network considered to be the preferred source of information for this event.
 
+3. Place is the City, State nearest to where the earthquake occurred.  Else, it is a general region, like `South of Tasmania`, for example.
 
 Sample output looks something like:
 
