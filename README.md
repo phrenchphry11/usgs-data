@@ -16,7 +16,7 @@ pip install -r requirements.txt
 
 The program can be run through Python or just as a bash script:
 ```
-python most_dangerous_regions.py 
+python most_dangerous_regions/most_dangerous_regions.py 
 ```
 or
 ```
@@ -25,7 +25,7 @@ or
 
 To learn about optional command line arguments, run:
 ```
-python most_dangerous_regions.py -h
+python most_dangerous_regions/most_dangerous_regions.py -h
 ```
 or
 ```
