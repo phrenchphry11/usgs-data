@@ -34,7 +34,7 @@ or
 
 Output that can be modified via command line arguments includes days, regional groupings, and number of regions to be displayed in the output.
 
-Regional groupings include timezone (tz) and network (net):  
+Regional groupings include timezone (tz), network (net), city (place):  
 
 1. Timezone is the offset from UTC in minutes at the event epicenter.
 

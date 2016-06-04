@@ -31,8 +31,8 @@ class EarthquakeAnalyzer(object):
                             "Defaults to 30.")
         parser.add_argument("--region-type", dest="region_type", default="tz",
                             help="Optional. Group earthquakes by different region type. "
-                            "Defaults to tz. Accepts `tz` (timezone) and `net` "
-                            "(reporting network).")
+                            "Defaults to tz. Accepts `tz` (timezone), `net` "
+                            "(reporting network) and `place` (City, Country).")
         parser.add_argument("--num-regions", type=int, dest="num_regions", default=10,
                             help="Number of regions to display. "
                             "Defaults to 10.")
