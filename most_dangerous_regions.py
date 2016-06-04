@@ -2,10 +2,10 @@ from collections import defaultdict
 import argparse
 import datetime
 import json
-import time
 
 import requests
 
+from location_utils import get_place
 from logarithmic_utils import sum_logscale_list
 
 
@@ -17,7 +17,7 @@ class EarthquakeAnalyzer(object):
     days = None
     region_type = None
     num_regions = None
-    VIABLE_REGION_GROUPINGS = ("tz", "net",)
+    VIABLE_REGION_GROUPINGS = ("tz", "net", "place",)
 
     def __init__(self):
         self.parse_arguments()
@@ -118,8 +118,7 @@ class EarthquakeAnalyzer(object):
 
     def _group_earthquakes_by_region(self, earthquake_json):
         """
-        Takes in an input of earthquakes in GeoJson format, as returned from the
-        USGS API.
+        Takes in an input of earthquakes in GeoJson format.
         Returns a dictionary where keys are regions, and the values are lists of magnitudes,
         all within the date specified by the command line args.
         """
@@ -131,7 +130,9 @@ class EarthquakeAnalyzer(object):
         ) - datetime.timedelta(days=self.days)
         earthquake_dict = defaultdict(list)
         for earthquake in earthquake_json:
-            region = earthquake["properties"][self.region_type]
+            region = self._get_region_grouping(earthquake)
+            if region is None:
+                continue
             magnitude = earthquake["properties"]["mag"]
             epoch_time = earthquake["properties"]["updated"]
             # divide by 1000 to convert from milliseconds to seconds
@@ -140,11 +141,22 @@ class EarthquakeAnalyzer(object):
                 earthquake_dict[region].append(magnitude)
         return earthquake_dict
 
+    def _get_region_grouping(self, earthquake):
+        """
+        Returns the name of the region by which the current earthquake will be grouped.
+        """
+        if self.region_type in ("tz", "net",):
+            region = earthquake["properties"][self.region_type]
+        else:
+            place = earthquake["properties"]["place"]
+            region = get_place(place)
+        return region
+
     def _sort_by_most_dangerous(self, earthquake_dict):
         """
         Takes in an input dictionary of earthquake regions as keys, and the
         values a list of magnitudes.
-        Returns a sorted list of lists, where each list includes:
+        Returns a sorted list of lists, where each inner list includes:
          [region, number of earthquakes per region, total magnitude]
         The list of lists is sorted by total magnitude in decreasing order.
         """

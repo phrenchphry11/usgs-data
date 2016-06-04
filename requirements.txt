@@ -1,2 +1,4 @@
+geopy==1.11.0
 pep8==1.7.0
 requests==2.10.0
+simplejson==3.8.2
