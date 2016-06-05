@@ -4,7 +4,7 @@ The current biggest piece of techinical debt in this current implementation is t
 
 Currently, when the user executes the program, a blob of JSON is returned from the USGS API.  There is a directory, `usgs_output` that contains two files, `usgs_dump.json` and `earthquake_ids.txt`.  All of this data gets loaded into the earthquake analyzer when it is instantiated.  Once the JSON is returned from the USGS, we look up the stored ids in `earthquake_ids.txt`, scan through the new JSON received, and see if there are any new, unseen ids that need to be added to our pseudo-database.  All new earthquakes and their ids get appended to the analyzer object and to the "database."  
 
-This works well enough for the very low-volume usage of this program.  However, it still is not fast to read and write and entire JSON blob each time the program is executed, and additionally, earthquake data is only getting stored with each run of the program, so in the future, I hope to store the earthquake database in an actual database.  
+This works well enough for the very low-volume usage of this program.  However, it still is not fast to read and write an entire JSON blob each time the program is executed, and additionally, earthquake data is only getting stored with each run of the program, so in the future, I hope to store the earthquake database in an actual database.  
 
 This way, we can have a cron job periodically running to write new earthquakes to the database, and instead of loading all the earthquake data into the analyzer object with each run of the program, we can easily query on dates, regions, etc to filter and analyze only a subset of the total earthquakes.
 
