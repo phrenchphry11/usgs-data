@@ -34,7 +34,7 @@ or
 
 Output that can be modified via command line arguments includes days, regional groupings, and number of regions to be displayed in the output.
 
-Regional groupings include timezone (tz), network (net), city (place):  
+Regional groupings include timezone (the command line arg is: `--region-type=tz`), network (`--region-type=net`), city (`--region-type=place`):  
 
 1. Timezone is the offset from UTC in minutes at the event epicenter.
 
@@ -73,3 +73,19 @@ se                            13                            3.23660841828
 ismpkansas                    8                             2.9600003324                  
 ld                            4                             1.85158129724
 ```
+
+### Running unit tests
+
+Unit tests should be run through [pytest](http://pytest.org/latest/).  To run:
+
+```
+cd tests
+
+py.test
+```
+
+To run indivdual tests, separate the test class and the individual test within that class by two colons, like so:
+
+```
+py.test test_most_dangerous_regions.py::TestEarthquakeAnalyzer::test_load_existing_earthquakes_from_db
+```  

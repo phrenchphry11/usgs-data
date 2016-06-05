@@ -11,7 +11,11 @@ from logarithmic_utils import sum_logscale_list
 
 
 EARTHQUAKE_JSON_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
-PATH = os.path.join(os.path.dirname(__file__), "usgs_output")
+PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "usgs_output")
+
+
+def get_db_path():
+    return PATH
 
 
 class EarthquakeAnalyzer(object):
@@ -72,10 +76,10 @@ class EarthquakeAnalyzer(object):
         $PATH/usgs_dump.json 
         """
         try:
-            with open('{}/usgs_dump.json'.format(PATH), 'r') as data_file:
+            with open('{}/usgs_dump.json'.format(get_db_path()), 'r') as data_file:
                 data = json.load(data_file)
                 self.earthquake_history.extend(data)
-            with open('{}/earthquake_ids.txt'.format(PATH), 'r') as data_file:
+            with open('{}/earthquake_ids.txt'.format(get_db_path()), 'r') as data_file:
                 self.seen_ids = data_file.read().splitlines()
         except IOError:
             # The data file does not exist yet.
@@ -105,9 +109,9 @@ class EarthquakeAnalyzer(object):
                 self.seen_ids.append(quake["id"])
                 data_changed = True
         if data_changed:
-            with open('{}/usgs_dump.json'.format(PATH), 'w') as data_file:
+            with open('{}/usgs_dump.json'.format(get_db_path()), 'w') as data_file:
                 json.dump(self.earthquake_history, data_file)
-            with open('{}/earthquake_ids.txt'.format(PATH), 'w') as data_file:
+            with open('{}/earthquake_ids.txt'.format(get_db_path()), 'w') as data_file:
                 data_file.write("\n".join(self.seen_ids))
 
     def _group_earthquakes_by_region(self, earthquake_json):

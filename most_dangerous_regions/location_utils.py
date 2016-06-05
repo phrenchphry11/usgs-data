@@ -35,9 +35,10 @@ def get_region(latitude, longitude, region_type="country"):
 def get_place(place_string):
     """
     Given a `place` string formatted like so: 
-        8km ENE of Eielson Air Force Base, Alaska
-    Returns just the location from the end of the string: `City, State` or `City, Country` 
-    or `Location` if there is no regular expression match.
+        8km ENE of San Francisco, California
+    Returns just the location from the end of the string: `City, State` or `City, Country`:
+        San Francisco, California 
+    or the original string if there is no regular expression match.
     """
     m = re.search("(\d+km \w+ of )([a-zA-Z\,\s]+)", place_string)
     if m is not None:
