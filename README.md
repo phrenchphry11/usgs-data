@@ -7,7 +7,7 @@ This tool is a commandline program that returns a table of the regions on earth 
 You'll need Python 2.7, and other dependencies should be installed via Pip.  Pip is already installed if you are 
 running >= Python 2.7.9, but you can grab it [here](https://pip.pypa.io/en/stable/installing/).
 
-Dependencies can be installed by running 
+Dependencies can be installed by running: 
 ```
 pip install -r requirements.txt
 ```
@@ -34,7 +34,7 @@ or
 
 Output that can be modified via command line arguments includes days, regional groupings, and number of regions to be displayed in the output.
 
-Regional groupings include timezone (the command line arg is: `--region-type=tz`), network (`--region-type=net`), city (`--region-type=place`):  
+Regional groupings include timezone (`--region-type=tz`), network (`--region-type=net`), city (`--region-type=place`):  
 
 1. Timezone is the offset from UTC in minutes at the event epicenter.
 
@@ -79,13 +79,13 @@ ld                            4                             1.85158129724
 Unit tests should be run through [pytest](http://pytest.org/latest/).  To run:
 
 ```
-cd tests
+$ cd tests
 
-py.test
+$ py.test
 ```
 
 To run indivdual tests, separate the test class and the individual test within that class by two colons, like so:
 
 ```
-py.test test_most_dangerous_regions.py::TestEarthquakeAnalyzer::test_load_existing_earthquakes_from_db
+$ py.test test_most_dangerous_regions.py::TestEarthquakeAnalyzer::test_load_existing_earthquakes_from_db
 ```  
