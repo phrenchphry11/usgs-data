@@ -8,7 +8,7 @@ This works well enough for the very low-volume usage of this program.  However, 
 
 This way, we can have a cron job periodically running to write new earthquakes to the database, and instead of loading all the earthquake data into the analyzer object with each run of the program, we can easily query on dates, regions, etc to filter and analyze only a subset of the total earthquakes.
 
-Furthermore, storing these earthquakes in a true database rather than my simple "database" would allow for more robust testing.  Currently, the unit tests are a bit brittle and incomplete, merely because there isn't as much robust tooling to test my basic file read and write system!
+Furthermore, storing these earthquakes in a true database rather than my simple "database" would allow for more robust testing.  Currently, the unit tests are a bit brittle and incomplete, partially because there isn't as much robust tooling to test my basic file read and write system!  I'd also like to add more unit tests around edge cases and error throwing.
 
 
 ### Region groupings
