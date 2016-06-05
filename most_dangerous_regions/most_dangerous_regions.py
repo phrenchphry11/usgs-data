@@ -40,12 +40,19 @@ class EarthquakeAnalyzer(object):
         parser.add_argument("--region-type", dest="region_type", default="place",
                             help="Optional. Group earthquakes by different region type. "
                             "Defaults to place. Accepts `tz` (timezone), `net` "
-                            "(reporting network) and `place` (City, Country).")
+                            "(reporting network) and `place` (city).")
         parser.add_argument("--num-regions", type=int, dest="num_regions", default=10,
                             help="Optional. Number of regions to display. "
                             "Defaults to 10.")
 
         args = parser.parse_args()
+
+        if args.num_regions < 0:
+            raise Exception("Cannot have a negative number of regions!")
+
+        if args.days < 0:
+            raise Exception("Cannot predict the future!")
+
         self.days = args.days
         self.region_type = args.region_type
         self.num_regions = args.num_regions
